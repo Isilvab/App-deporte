@@ -15,16 +15,17 @@ def get_exercise_by_name(db: Session, name: str) -> exercise_model.Exercise | No
 def get_exercises(db: Session, skip: int = 0, limit: int = 100) -> List[exercise_model.Exercise]:
     """
     Obtiene una lista de todos los ejercicios, con paginación.
+    Esta es la función que alimenta la pantalla de "Crear Rutina".
     """
     return db.query(exercise_model.Exercise).offset(skip).limit(limit).all()
 
-def create_exercise(db: Session, exercise: exercise_schema.ExerciseCreate, creator_id: int) -> exercise_model.Exercise:
+def create_exercise(db: Session, exercise: exercise_schema.ExerciseCreate, creator_id: int | None = None) -> exercise_model.Exercise:
     """
     Crea un nuevo ejercicio en la base de datos.
+    El creator_id es opcional.
     """
-    # Creamos el objeto del modelo de base de datos
     db_exercise = exercise_model.Exercise(
-        **exercise.model_dump(),  # Desempaqueta los datos del esquema
+        **exercise.model_dump(),
         creator_id=creator_id
     )
     
